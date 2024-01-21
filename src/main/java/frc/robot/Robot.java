@@ -4,9 +4,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.commands.Commando;
+import frc.robot.commands.Drive;
+import frc.robot.commands.Shoot;
+import frc.robot.subsystems.ArcadeDrive;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,6 +25,15 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  Joystick lj = new Joystick(0);
+  Joystick rj = new Joystick(1);
+  ArcadeDrive s_ArcadeDrive = new ArcadeDrive();
+  Drive c_drive = new Drive(s_ArcadeDrive, lj,rj);
+  Shooter s_shooter = new Shooter();
+  Shoot c_shoot = new Shoot(s_shooter);
+
+Commando automatic = new Commando (s_ArcadeDrive);
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -48,25 +64,28 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    s_ArcadeDrive.releaseBrake();
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    s_ArcadeDrive.releaseBrake();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    automatic.initialize();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    // automatic.execute();
+    // automatic.isFinished();
+
+  }
 
   @Override
   public void teleopInit() {
@@ -81,7 +100,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    c_shoot.schedule();
+  }
 
   @Override
   public void testInit() {

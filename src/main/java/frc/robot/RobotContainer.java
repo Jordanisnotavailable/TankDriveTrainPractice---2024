@@ -37,7 +37,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    s_ArcadeDrive.setDefaultCommand(c_drive);
     // Configure the trigger bindings
     configureBindings();
   }

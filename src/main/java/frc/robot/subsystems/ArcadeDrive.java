@@ -53,11 +53,18 @@ public class ArcadeDrive extends SubsystemBase {
     SmartDashboard.putNumber("Distance", left1.getSelectedSensorPosition());
     SmartDashboard.putNumber("MotorOutputPercent", left1.getMotorOutputPercent());
   }
-  public void ReleaseBrake(){
+  public void releaseBrake(){
     left1.setNeutralMode(NeutralMode.Coast);
     right1.setNeutralMode(NeutralMode.Coast);
+    left2.setNeutralMode(NeutralMode.Coast);
+    right2.setNeutralMode(NeutralMode.Coast);
   }
-
+  public void autospin(){
+    m_DifferentialDrive.arcadeDrive(0.5,0.5);
+  }
+  public void stopMotor(){
+    m_DifferentialDrive.arcadeDrive(0, 0);
+  }
 
   @Override
   public void periodic() {
